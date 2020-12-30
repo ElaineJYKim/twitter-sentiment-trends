@@ -37,48 +37,6 @@ const authMessage = {
   type: "https://developer.twitter.com/en/docs/authentication",
 };
 
-
-// app.get("/api/search/:query", async (req, res) => {
-//   if (!BEARER_TOKEN) {
-//     res.status(400).send(authMessage);
-//   }
-
-//   const token = BEARER_TOKEN;
-
-//   var finalResponse = {}
-//   var now = new Date();
-
-//   var start = new Date();
-//   var end = new Date();
-//   start.setDate(now.getDate()-5);
-//   end.setDate(now.getDate()-4);
-
-//   const requestConfig = {
-//     url: searchURL + "?query=" + req.params.query + "&end_time=" + end.toISOString() + "&start_time=" + start.toISOString() + "&tweet.fields=lang",
-//     auth: {
-//       bearer: token,
-//     },
-//     json: true,
-//   };
-
-//   try {
-//     const response = await get(requestConfig);
-
-//     if (response.statusCode !== 200) {
-//       if (response.statusCode === 403) {
-//         res.status(403).send(response.body);
-//       } else {
-//         throw new Error(response.body.error.message);
-//       }
-//     }
-
-//     res.send(response);
-//   } catch (e) {
-//     res.send(e);
-//   }
-// });
-
-
 app.get("/api/search/:query", async (req, res) => {
   if (!BEARER_TOKEN) {
     res.status(400).send(authMessage);
@@ -162,7 +120,18 @@ app.get("/api/search/:query", async (req, res) => {
     count++;
   }
 
-  res.send(finalResponse)
+  if (Object.keys(finalResponse).length !== 0) {
+    res.send(finalResponse);
+  }
+
+});
+
+app.get("/api/sentiment/:tweet", async (req, res) => {
+
+  var Sentiment = require('sentiment');
+  var sentiment = new Sentiment();
+  var result = sentiment.analyze(req.params.tweet);
+  res.send({"sentiment": result.score});   
 });
 
 

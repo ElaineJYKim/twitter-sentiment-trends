@@ -20,6 +20,7 @@
     "react-scripts": "4.0.1",
     "react-twitter-embed": "^3.0.3",
     "request": "^2.88.2",
+    "sentiment": "^5.0.2",
     "socket.io": "^3.0.4",
     "socket.io-client": "^3.0.4",
     "util": "^0.11.1",
