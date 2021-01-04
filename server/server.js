@@ -53,8 +53,15 @@ app.get("/api/search/:query", async (req, res) => {
 
   while (count < 7) {
 
+
+    console.log("COUNT -----------------------", count);
+
     startTime.setDate(endTime.getDate()-1)
     var startTimeString = startTime.toISOString()
+
+    console.log("START TIME ~~~~~~~~~~~~~~~~~~", startTime)
+    console.log("END TIME ~~~~~~~~~~~~~~~~~~~~", endTime)
+
     
     if (count === 0) {
 
@@ -71,18 +78,18 @@ app.get("/api/search/:query", async (req, res) => {
     
         if (response.statusCode !== 200) {
           if (response.statusCode === 403) {
-            res.status(403).send(response.body);
+            console.log("ERROR DUMPLING");
+            return res.status(403).send(response.body);
           } else {
             throw new Error(response.body.error.message);
           }
-          break;
         }
-    
+  
         finalResponse[startTimeString] = response;
 
       } catch (e) {
-        res.send(e);
-        break;
+        console.log("ERROR PONYO");
+        return res.send(e);
       }
 
     } else {
@@ -100,29 +107,28 @@ app.get("/api/search/:query", async (req, res) => {
     
         if (response.statusCode !== 200) {
           if (response.statusCode === 403) {
-            res.status(403).send(response.body);
+            console.log("ERROR BEAN");
+            return res.status(403).send(response.body);
           } else {
+            console.log("THE EROOR *******************", response.body.error.message)
             throw new Error(response.body.error.message);
           }
-          break;
         }
     
         finalResponse[startTimeString] = response;
 
       } catch (e) {
-        res.send(e);
-        break;
+        console.log("ERROR BUBS");
+        return res.send(e);
       }
 
     }
 
-    endTime.setDate(startTime.getDate());
+    endTime = new Date(startTimeString);
     count++;
   }
 
-  if (Object.keys(finalResponse).length !== 0) {
-    res.send(finalResponse);
-  }
+  return res.send(finalResponse);
 
 });
 
@@ -133,8 +139,6 @@ app.get("/api/sentiment/:tweet", async (req, res) => {
   var result = sentiment.analyze(req.params.tweet);
   res.send({"sentiment": result.score});   
 });
-
-
 
 console.log("NODE_ENV is", process.env.NODE_ENV);
 
