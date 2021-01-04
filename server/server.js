@@ -37,6 +37,135 @@ const authMessage = {
   type: "https://developer.twitter.com/en/docs/authentication",
 };
 
+function isEng(data) {
+  return data.lang === "en";
+}
+
+function average(array) {
+  return array.reduce((a, b) => a + b) / array.length;
+}
+
+
+app.get("/api/searchSentiment/:query", async (req, res) => {
+  if (!BEARER_TOKEN) {
+    res.status(400).send(authMessage);
+  }
+
+  const token = BEARER_TOKEN;
+  const url = searchURL + "?query=" + req.params.query + "&tweet.fields=lang"
+
+  var finalResponse = {}
+
+  var Sentiment = require('sentiment');
+  var sentiment = new Sentiment();
+
+  var startTime = new Date();
+  var endTime = new Date();
+  var count = 0; 
+
+  while (count < 7) {
+
+
+    console.log("COUNT -----------------------", count);
+
+    startTime.setDate(endTime.getDate()-1)
+    var startTimeString = startTime.toISOString()
+
+    console.log("START TIME ~~~~~~~~~~~~~~~~~~", startTime)
+    console.log("END TIME ~~~~~~~~~~~~~~~~~~~~", endTime)
+
+    
+    if (count === 0) {
+
+      const requestConfig = {
+        url: url + "&start_time=" + startTimeString,
+        auth: {
+          bearer: token,
+        },
+        json: true,
+      };
+    
+      try {
+        const response = await get(requestConfig);
+    
+        if (response.statusCode !== 200) {
+          if (response.statusCode === 403) {
+            console.log("ERROR DUMPLING");
+            return res.status(403).send(response.body);
+          } else {
+            throw new Error(response.body.error.message);
+          }
+        }
+  
+        let textArray = response.body.data.filter(isEng).map(({ text }) => text);
+        let sentimentArray = textArray.map(tweet => sentiment.analyze(tweet).score);
+        let meanSentiment = average(sentimentArray);
+
+        let summary = {
+          "meanSentiment": meanSentiment,
+          "sentimentArray": sentimentArray,
+          "response": response
+        }
+    
+        finalResponse[startTimeString] = summary;
+
+      } catch (e) {
+        console.log("ERROR PONYO");
+        return res.send(e);
+      }
+
+    } else {
+
+      const requestConfig = {
+        url: url + "&start_time=" + startTimeString + '&end_time=' + endTime.toISOString(),
+        auth: {
+          bearer: token,
+        },
+        json: true,
+      };
+    
+      try {
+        const response = await get(requestConfig);
+    
+        if (response.statusCode !== 200) {
+          if (response.statusCode === 403) {
+            console.log("ERROR BEAN");
+            return res.status(403).send(response.body);
+          } else {
+            console.log("THE EROOR *******************", response.body.error.message)
+            throw new Error(response.body.error.message);
+          }
+        }
+    
+        let textArray = response.body.data.filter(isEng).map(({ text }) => text);
+        let sentimentArray = textArray.map(tweet => sentiment.analyze(tweet).score);
+        let meanSentiment = average(sentimentArray);
+
+        let summary = {
+          "meanSentiment": meanSentiment,
+          "sentimentArray": sentimentArray,
+          "response": response
+        }
+    
+        finalResponse[startTimeString] = summary;
+
+      } catch (e) {
+        console.log("ERROR BUBS");
+        return res.send(e);
+      }
+
+    }
+
+    endTime = new Date(startTimeString);
+    count++;
+  }
+
+  return res.send(finalResponse);
+
+});
+
+
+
 app.get("/api/search/:query", async (req, res) => {
   if (!BEARER_TOKEN) {
     res.status(400).send(authMessage);
@@ -131,6 +260,7 @@ app.get("/api/search/:query", async (req, res) => {
   return res.send(finalResponse);
 
 });
+
 
 app.get("/api/sentiment/:tweet", async (req, res) => {
 

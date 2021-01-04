@@ -6,10 +6,19 @@ Graph sentiment trends by topic on twitter and compare with other topics.
 + https://www.npmjs.com/package/sentiment#usage-example
 
 ## Server
+/api/searchSentiment/:query 
+```json
+{
+    "2020-12-29T07:08:42.485Z" :{
+        "meanSentiment": 0.23,
+        "sentimentArray": [],
+        "response": {
+            // Same json format as the one below
+        }
+}
+```
 
-/api/search/:query
-
-returns 
+/api/search/:query 
 
 ```json
 {
@@ -38,6 +47,14 @@ returns
     "2020-12-23T07:08:42.485Z" :{}
 }
 ```
+
+/api/sentiment/:text
+```json
+{
+    "sentiment": 3
+}
+``` 
+
 
 or 
 
