@@ -45,10 +45,11 @@ function average(array) {
   return array.reduce((a, b) => a + b) / array.length;
 }
 
-
+// TODO: (optional) add "response": response
+// TODO: error message not being sent
 app.get("/api/searchSentiment/:query", async (req, res) => {
   if (!BEARER_TOKEN) {
-    res.status(400).send(authMessage);
+     return res.status(400).send(authMessage);
   }
 
   const token = BEARER_TOKEN;
@@ -90,7 +91,7 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
     
         if (response.statusCode !== 200) {
           if (response.statusCode === 403) {
-            console.log("ERROR DUMPLING");
+            console.log("ERROR DUMPLING ===== ", response.body);
             return res.status(403).send(response.body);
           } else {
             throw new Error(response.body.error.message);
@@ -104,14 +105,13 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
         let summary = {
           "meanSentiment": meanSentiment,
           "sentimentArray": sentimentArray,
-          "response": response
         }
     
         finalResponse[startTimeString] = summary;
 
       } catch (e) {
-        console.log("ERROR PONYO");
-        return res.send(e);
+        console.log("ERROR PONYO ===== ", e);
+        return res.status(500).send(e);
       }
 
     } else {
@@ -129,7 +129,7 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
     
         if (response.statusCode !== 200) {
           if (response.statusCode === 403) {
-            console.log("ERROR BEAN");
+            console.log("ERROR BEAN ====== ", response.body);
             return res.status(403).send(response.body);
           } else {
             console.log("THE EROOR *******************", response.body.error.message)
@@ -144,14 +144,13 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
         let summary = {
           "meanSentiment": meanSentiment,
           "sentimentArray": sentimentArray,
-          "response": response
         }
     
         finalResponse[startTimeString] = summary;
 
       } catch (e) {
-        console.log("ERROR BUBS");
-        return res.send(e);
+        console.log("ERROR BUBS ===== ", e);
+        return res.status(500).send(e);
       }
 
     }
