@@ -1,7 +1,7 @@
 import React from "react";
 import '../stylesheets/App.css';
 
-import { Input, Divider, Row, Col, Card, Title } from 'antd';
+import { Divider, Card, List, Button } from 'antd';
 import { PlusCircleTwoTone, MinusCircleTwoTone } from '@ant-design/icons';
 
 
@@ -12,19 +12,24 @@ class TopicsList extends React.Component {
         this.state = {
             selected: [],
         }
+
+        //this.handleSelect = this.handleSelect.bind(this);
     }
 
-    handleSelect(topic) {
+    handleSelect(e) {
         const selected = this.state.selected;
+        const topic = e.target.value;
+        var newSelected = [];
 
         if (selected.includes(topic)) {
-            const newSelected = selected.filter(function(t) { return t !== topic; })
-            this.setState({selected: newSelected})
+            newSelected = selected.filter(function(t) { return t !== topic; });
         } else {
-            this.setState({selected: [...selected, topic]})
-        }
+            newSelected = [...selected, topic];
+        };
 
-        this.props.onChange(this.state.selected);
+        this.setState({selected: newSelected});
+
+        this.props.onChange(newSelected);
     }
 
     render() {
@@ -33,17 +38,21 @@ class TopicsList extends React.Component {
 
         return(
             <div className='topic-cards'>
-                <Divider orientation="left">Topics</Divider>
-                <Row gutter={16}>
-                { topics.map((topic) => (
-                <Col className="gutter-row" span={6} >
-                    <Card title={topic} bordered={true} extra={<PlusCircleTwoTone twoToneColor="#52c41a"/>}>
-                        <button onClick={this.handleSelect(topic)}>See Trends</button>
+
+                <Divider orientation="left">Select Topics</Divider>
+
+                <List
+                grid={{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3,}}
+                dataSource={topics}
+                renderItem={topic => (
+                <List.Item>
+                    <Card title={topic}>
+                    <Button type="primary" value={topic} onClick={this.handleSelect.bind(this)}>See Trends</Button>
                     </Card>
-                </Col>
-                )) }
-            
-                </Row>
+                </List.Item>
+                )}
+                />,
+
             </div>
         );
     }

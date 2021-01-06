@@ -45,7 +45,14 @@ function average(array) {
   return array.reduce((a, b) => a + b) / array.length;
 }
 
-// TODO: (optional) add "response": response
+function readableDate(dateObj) {
+  let month = dateObj.getUTCMonth() + 1; //months from 1-12
+  let day = dateObj.getUTCDate();
+  let year = dateObj.getUTCFullYear();
+  return month + "/" + day + "/" + year;
+}
+
+// Add paramters to change api returns
 // TODO: error message not being sent
 app.get("/api/searchSentiment/:query", async (req, res) => {
   if (!BEARER_TOKEN) {
@@ -69,8 +76,9 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
 
     console.log("COUNT -----------------------", count);
 
-    startTime.setDate(endTime.getDate()-1)
-    var startTimeString = startTime.toISOString()
+    startTime.setDate(endTime.getDate()-1);
+    let startTimeString = startTime.toISOString();
+    let readableStartTime = readableDate(startTime);
 
     console.log("START TIME ~~~~~~~~~~~~~~~~~~", startTime)
     console.log("END TIME ~~~~~~~~~~~~~~~~~~~~", endTime)
@@ -102,12 +110,13 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
         let sentimentArray = textArray.map(tweet => sentiment.analyze(tweet).score);
         let meanSentiment = average(sentimentArray);
 
-        let summary = {
-          "meanSentiment": meanSentiment,
-          "sentimentArray": sentimentArray,
-        }
+        // let summary = {
+        //   "meanSentiment": meanSentiment,
+        //   "sentimentArray": sentimentArray,
+        //   "response": response
+        // }
     
-        finalResponse[startTimeString] = summary;
+        finalResponse[readableStartTime] = meanSentiment;
 
       } catch (e) {
         console.log("ERROR PONYO ===== ", e);
@@ -141,12 +150,13 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
         let sentimentArray = textArray.map(tweet => sentiment.analyze(tweet).score);
         let meanSentiment = average(sentimentArray);
 
-        let summary = {
-          "meanSentiment": meanSentiment,
-          "sentimentArray": sentimentArray,
-        }
+        // let summary = {
+        //   "meanSentiment": meanSentiment,
+        //   "sentimentArray": sentimentArray,
+        //   "response": response
+        // }
     
-        finalResponse[startTimeString] = summary;
+        finalResponse[readableStartTime] = meanSentiment;
 
       } catch (e) {
         console.log("ERROR BUBS ===== ", e);

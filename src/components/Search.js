@@ -11,7 +11,7 @@ class Search extends React.Component {
         super(props);
         this.state = { 
             curValue: '',
-            topics: ["bumblebee"],
+            topics: [],
             selected: [],
             info: {},
             errorMsg: "",
@@ -19,8 +19,6 @@ class Search extends React.Component {
         };
         this.handleEnter = this.handleEnter.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
-        this.handleSelectedListChange = this.handleSelectedListChange.bind(this);
-
     }
 
     renderError() {
@@ -38,14 +36,24 @@ class Search extends React.Component {
     }
 
     handleSearch() {
-        const newTopics = [...this.state.topics, this.state.curValue]
+
+        const value = this.state.curValue;
+        const topics = this.state.topics;
+
+        if (topics.includes(value)) {
+            this.setState({
+                errorMsg: "You have already searched for this topic",
+                curValue: ''
+            })
+        } else {
+        const newTopics = [...this.state.topics, value]
         this.setState({loading: true})
 
         this.callApi()
            .then(
                res => {
                    const updateInfo = this.state.info;
-                   updateInfo[this.state.curValue] = res;
+                   updateInfo[value] = res;
                    this.setState({
                        info: updateInfo,
                        curValue: '',
@@ -58,10 +66,11 @@ class Search extends React.Component {
                    console.log("im HEREEE <3: ", err);
                    this.setState({
                     curValue: '',
-                    errorMsg: "Yuppers. big fail. sad. big sad.",
+                    errorMsg: "Something went wrong with the server",
                     loading: "false"
                  })
                 });
+        }
 
     };
 
@@ -86,8 +95,8 @@ class Search extends React.Component {
         this.setState({errorMsg: ''})
     }
 
-    handleSelectedListChange(s) {
-        this.setState({selected: s});
+    handleSelectedUpdate(newSelected) {
+        this.setState({selected: newSelected});
     }
 
     render() {
@@ -116,7 +125,7 @@ class Search extends React.Component {
                 topics={this.state.topics} 
                 selected={this.state.selected} 
                 info={this.state.info}
-                onChange={this.handleSelectedListChange}
+                onChange={this.handleSelectedUpdate.bind(this)}
                 />
 
             </div>

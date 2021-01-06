@@ -4,6 +4,8 @@ Graph sentiment trends by topic on twitter and compare with other topics.
 
 ## Dependencies
 + https://www.npmjs.com/package/sentiment#usage-example
++ https://github.com/recharts/recharts
++ https://ant.design/
 
 ## Server
 /api/searchSentiment/:query 
