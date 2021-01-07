@@ -60,7 +60,7 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
   }
 
   const token = BEARER_TOKEN;
-  const url = searchURL + "?query=" + req.params.query + "&tweet.fields=lang"
+  const url = searchURL + "?query=" + req.params.query + "&tweet.fields=lang" + "&max_results=100" 
 
   var finalResponse = {}
 

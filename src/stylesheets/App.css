@@ -1,5 +1,20 @@
 @import '~antd/dist/antd.css';
 
 .graph {
-    height: 20rem;
+    height: 30rem;
+}
+
+.selectContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-container {
+    margin: 0 auto;
+    width: 60%;  
+}
+
+.space {
+    height: 1rem;
 }

@@ -34,6 +34,7 @@ class Graph extends React.Component {
         return(
             <div className='graph'>
       <ResponsiveLine
+        curve={"monotoneX"}
         data={test}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         xScale={{
@@ -62,8 +63,6 @@ class Graph extends React.Component {
         }}
         axisBottom={{
           format: "%b %d",
-          //tickValues: "every 2 days",
-          // tickRotation: -90,
           legend: "time scale",
           legendOffset: -12
         }}
@@ -100,6 +99,15 @@ class Graph extends React.Component {
               }
             ]
           }
+        ]}
+        markers={[
+            {
+                axis: 'y',
+                value: 0,
+                lineStyle: { stroke: '#b0413e', strokeWidth: 1 },
+                legend: '',
+                legendOrientation: 'vertical',
+            },
         ]}
       />
             </div>

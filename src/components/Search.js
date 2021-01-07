@@ -4,17 +4,37 @@ import '../stylesheets/App.css';
 import TopicsList from './TopicsList';
 import Graph from './Graph';
 
-import { Input, Alert } from 'antd';
+import { Input, Alert, Typography } from 'antd';
+import { InfoCircleTwoTone } from '@ant-design/icons';
+
+const tips = (
+    <>
+    <h3> Tips for better results! - Specify your search</h3>
+    <br/>
+
+    <p>I am going to search twitter for a bunch of tweets using the search phrase you give me. </p>
+    <p>This means, if you search "Donald Trump", I will collect a bunch of tweets that contains the keyword "Donald Trump".</p>
+    <p>I recommend you <b>narrowing</b> your search using the tools below to get the best results.</p>
+
+    <ul>
+       <li>AND operators: <b>snow day #NoSchool</b> == "snow AND day AND #NoSchool"</li>
+       <li>OR operators: <b>grumpy OR cat OR #meme</b></li>
+       <li>Group operators: <b>(grumpy cat) OR (#meme has:images)</b></li>
+       <li>Negate: <b>cat #meme -grumpy</b> means contains key word "cat", hashtag "meme", but NOT the keyword "grumpy"</li>
+    </ul> 
+    </>
+  ); 
 
 class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
             curValue: '',
-            topics: [],
+            topics: ["helloooo"],
             selected: [],
             info: {},
             errorMsg: "",
+            showTips: true,
             loading: false,
         };
         this.handleEnter = this.handleEnter.bind(this);
@@ -67,7 +87,7 @@ class Search extends React.Component {
                    this.setState({
                     curValue: '',
                     errorMsg: "Something went wrong with the server",
-                    loading: "false"
+                    loading: false
                  })
                 });
         }
@@ -111,20 +131,35 @@ class Search extends React.Component {
                     closable showIcon/>
                 }
 
+                {this.state.showTips && <div className="space"/> && <Alert
+                    message={tips}
+                    type="info"
+                    onClick={() => this.setState({showTips: false})}
+                    closeable/>
+                }
+
+                <div className="space"/>
+
                 <Input 
                 placeholder="Search Topic" 
                 value={this.state.curValue}
                 onChange={(e) => this.setState({curValue: e.target.value})}
                 onPressEnter={this.handleSearch}
+                suffix={<InfoCircleTwoTone onClick={() => this.setState({showTips: true})}/>}
                 />
+
+                <div className="space"/>
 
                 <Graph info={this.state.info} selected={this.state.selected}>
                 </Graph>
+
+                <div className="space"/>
 
                 <TopicsList 
                 topics={this.state.topics} 
                 selected={this.state.selected} 
                 info={this.state.info}
+                loading={this.state.loading}
                 onChange={this.handleSelectedUpdate.bind(this)}
                 />
 

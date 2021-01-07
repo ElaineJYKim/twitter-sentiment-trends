@@ -1,8 +1,10 @@
 import React from "react";
 import '../stylesheets/App.css';
 import Search from './Search';
+import Logo from '../assets/logo.png';
 
 import { PageHeader, Typography } from 'antd';
+import { ExperimentTwoTone } from '@ant-design/icons';
 
 const content = (
     <>
@@ -18,16 +20,16 @@ class App extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="app-container">
                 <PageHeader
                     title="Twitter Sentiment Trends Visualizer"
                     className="site-page-header" 
                     subTitle=""
-                    avatar={{ src: '' }}
+                    avatar={{src:Logo, size:'large', shape:'square'}}
                >
                 {content}
                 </PageHeader>
-                
+                <div className="space"/> <div className="space"/>
                 <Search/>
             </div>
         );
