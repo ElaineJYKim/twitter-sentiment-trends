@@ -1,5 +1,6 @@
 import React from "react";
 import '../stylesheets/App.css';
+import ArticlesList from './ArticlesList';
 
 import { ResponsiveLine } from '@nivo/line';
 
@@ -21,6 +22,32 @@ function formatData(selected, info) {
 }
 
 class Graph extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewArticles: false,
+      date: '',
+      query: '',
+    };
+  }
+
+  renderArticlesList() {
+    return (
+      <ArticlesList date={this.state.date} query={this.state.query}/>
+    );
+  }
+
+  handlePointClick(point) {
+    console.log(point)
+    const date = point['data']['xFormatted']
+    const query = point['serieId']
+    this.setState({
+      viewArticles: true,
+      date: date,
+      query: query
+    })
+  }
  
     render() {
 
@@ -74,6 +101,7 @@ class Graph extends React.Component {
         pointLabel="y"
         pointLabelYOffset={-12}
         useMesh={true}
+        onClick={(point) => this.handlePointClick(point)}
         legends={[
           {
             anchor: "bottom-right",
@@ -110,6 +138,7 @@ class Graph extends React.Component {
             },
         ]}
       />
+              {this.state.viewArticles && this.renderArticlesList}
             </div>
         );
     } else {

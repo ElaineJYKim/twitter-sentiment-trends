@@ -1,8 +1,8 @@
 import React from "react";
 import '../stylesheets/App.css';
-import Select from './Select';
+import GraphSelect from './GraphSelect';
 
-import { Divider, Card, List, Row, Col } from 'antd';
+import { Divider, Card, List, Row, Col, Spin } from 'antd';
 import {DeleteOutlined, EllipsisOutlined, EditOutlined} from '@ant-design/icons';
 
 class TopicsList extends React.Component {
@@ -12,8 +12,6 @@ class TopicsList extends React.Component {
         this.state = {
             selected: [],
         }
-
-        //this.handleSelect = this.handleSelect.bind(this);
     }
 
     handleSelect(e) {
@@ -34,8 +32,9 @@ class TopicsList extends React.Component {
     }
 
     handleDelete(e) {
-        const topic = e.currentTarget.value;
-        this.props.delete(topic)
+        const topic = e.currentTarget.dataset.topic;
+        console.log("AYAY: ", topic)
+        this.props.delete(e)
     }
 
     render() {
@@ -47,36 +46,24 @@ class TopicsList extends React.Component {
 
                 <Divider orientation="left">Topics</Divider>
 
-                <List
-                grid={{ gutter: 16, column: 4 }}
-                dataSource={topics}
-                loading={loading}
-                renderItem={topic => (
-                <List.Item>
+                <Spin size="small" spinning={loading} tip="look at the spinny thing and it shall load in no time...">
+                <Row gutter={[16, 16]}>
+                { topics.map((topic) => (
+                <Col className="gutter-row" span={6} >
                     <Card
-                    actions={[ 
-                    // <selectContainer className="selectContainer" data-topic={topic} onClick={this.handleSelect.bind(this)}>
-                    //                 <Select/>
-                    // </selectContainer>, 
-                    <DeleteOutlined value={topic} onClick={this.handleDelete.bind(this)} key="delete"/>
-                    ]}
+                        actions={[
+                            <selectContainer className="selectContainer" data-topic={topic} onClick={this.handleSelect.bind(this)}>
+                                    <GraphSelect/>
+                            </selectContainer>, 
+                            <DeleteOutlined data-topic={topic} onClick={this.handleDelete.bind(this)} key="delete"/>
+                        ]}
                     >
-                        <Row align="top" justify="center">
-                            <Col span={22}><h4>{topic}</h4></Col>
-                            <Col span={2}>
-                                <selectContainer 
-                                    className="selectContainer"
-                                    data-topic={topic}
-                                    onClick={this.handleSelect.bind(this)}
-                                >
-                                    <Select/>
-                                </selectContainer>
-                            </Col>
-                        </Row>
+                        <h4>{topic}</h4>
                     </Card>
-                </List.Item>
-                )}
-                />
+                </Col>
+                )) }
+                </Row>
+                </Spin>
 
             </div>
         );
@@ -84,19 +71,3 @@ class TopicsList extends React.Component {
 }
 
 export default TopicsList;
-
-
-{/* <Card>
-<Row justify="end">
-    <selectContainer 
-        className="selectContainer"
-        data-topic={topic}
-        onClick={this.handleSelect.bind(this)}
-    >
-        <Select/>
-    </selectContainer>
-</Row>
-<Row>
-    <h4>{topic}</h4>
-</Row>
-</Card> */}

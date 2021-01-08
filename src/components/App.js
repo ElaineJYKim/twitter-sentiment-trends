@@ -29,7 +29,9 @@ class App extends React.Component {
                >
                 {content}
                 </PageHeader>
+
                 <div className="space"/> <div className="space"/>
+                
                 <Search/>
             </div>
         );

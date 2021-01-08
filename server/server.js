@@ -18,10 +18,15 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
+const NYT_TOKEN = process.env.NYT_TOKEN;
 
 
 const searchURL = new URL(
   "https://api.twitter.com/2/tweets/search/recent"
+);
+
+const nytURL = new URL (
+  "https://api.nytimes.com/svc/search/v2/articlesearch.json"
 );
 
 const errorMessage = {
@@ -173,8 +178,6 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
 
 });
 
-
-
 app.get("/api/search/:query", async (req, res) => {
   if (!BEARER_TOKEN) {
     res.status(400).send(authMessage);
@@ -270,13 +273,55 @@ app.get("/api/search/:query", async (req, res) => {
 
 });
 
-
 app.get("/api/sentiment/:tweet", async (req, res) => {
 
   var Sentiment = require('sentiment');
   var sentiment = new Sentiment();
   var result = sentiment.analyze(req.params.tweet);
   res.send({"sentiment": result.score});   
+});
+
+
+// TWO PARAMETERS 1. date 2. q
+app.get("/api/articles", async (req, res) => {
+
+  if (!NYT_TOKEN) {
+    console.log("BEANERS");
+    res.status(400).send(authMessage);
+  }
+
+  const key = NYT_TOKEN;
+
+  const date = req.query.date;
+  const query = req.query.q;
+
+  const url = nytURL + "?api-key=" + key + "&sort=relevance&begin_date=" + date
+                     + "&end_date=" + date + "&q=" + query;
+
+  const requestConfig = {
+    url: url + "&q=election",
+    json: true
+  };
+
+  try {
+    const response = await get(requestConfig);
+
+    if (response.statusCode !== 200) {
+      if (response.statusCode === 403) {
+        console.log("ERROR DUMPLING ===== ", response.body);
+        res.status(403).send(response.body);
+      } else {
+        throw new Error(response.body.error.message);
+      }
+    }
+
+    res.send(response);
+
+  } catch (e) {
+    console.log("ERROR PONYO ===== ", e);
+    res.status(500).send(e);
+  }
+
 });
 
 console.log("NODE_ENV is", process.env.NODE_ENV);

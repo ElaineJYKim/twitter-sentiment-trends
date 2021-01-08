@@ -30,7 +30,7 @@ class Search extends React.Component {
         super(props);
         this.state = { 
             curValue: '',
-            topics: ["helloooo"],
+            topics: [],
             selected: [],
             info: {},
             errorMsg: "",
@@ -39,6 +39,25 @@ class Search extends React.Component {
         };
         this.handleEnter = this.handleEnter.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+    }
+
+    handleDelete(e) {
+        const topic = e.currentTarget.dataset.topic;
+        
+        // delete from topics
+        let newTopics = this.state.topics.filter(function(t) { return t !== topic; });
+        // if contains, delecte from selected
+        var newSelected = this.state.selected
+        if (this.state.selected.includes(topic)) {
+            newSelected = this.state.selected.filter(function(t) { return t !== topic; });
+        }
+        // delete from info
+        delete this.state.info[topic]
+
+        this.setState({
+            topics: newTopics,
+            selected: newSelected,
+        })
     }
 
     renderError() {
@@ -86,7 +105,7 @@ class Search extends React.Component {
                    console.log("im HEREEE <3: ", err);
                    this.setState({
                     curValue: '',
-                    errorMsg: "Something went wrong with the server",
+                    errorMsg: "Something went wrong with the server. " + err,
                     loading: false
                  })
                 });
@@ -100,7 +119,7 @@ class Search extends React.Component {
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
         return body;
-      };
+    };
 
     handleEnter() {
         const newTopics = [...this.state.topics, this.state.curValue]
@@ -128,10 +147,11 @@ class Search extends React.Component {
                     description={this.state.errorMsg}
                     type="error"
                     onClose={() => this.setState({errorMsg: ''})}
-                    closable showIcon/>
+                    closable showIcon/> 
+                    && <div className="space"/>
                 }
 
-                {this.state.showTips && <div className="space"/> && <Alert
+                {this.state.showTips && <Alert
                     message={tips}
                     type="info"
                     onClick={() => this.setState({showTips: false})}
@@ -161,6 +181,7 @@ class Search extends React.Component {
                 info={this.state.info}
                 loading={this.state.loading}
                 onChange={this.handleSelectedUpdate.bind(this)}
+                delete={this.handleDelete.bind(this)}
                 />
 
             </div>

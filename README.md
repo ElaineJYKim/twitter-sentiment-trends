@@ -6,8 +6,23 @@ Graph sentiment trends by topic on twitter and compare with other topics.
 + https://www.npmjs.com/package/sentiment#usage-example
 + https://github.com/recharts/recharts
 + https://ant.design/
++ twitter v2 api
++ nyt search api
+
+## Environment tokens 
+- export TWITTER_BEARER_TOKEN=AAAAAAAAAAAAAAAAAAAAACBJLAEAAAAAsYzrnffYUjZ4NHzsMuviTuA1sSw%3Ds0Oy3ivaxaIlBiy6IhgZna50tXYKEQwa1kFXJL4SJ5b6sLWHoZ
+
+
+- export NYT_TOKEN=dyI6Feqpgk60QDvWFRBQHUlW3BLSGKkT
 
 ## Server
+GET /api/articles
+Parameters
+- date = YYYYmmdd
+- q = "query string"
+
+response = https://developer.nytimes.com/docs/articlesearch-product/1/routes/articlesearch.json/get
+
 /api/searchSentiment/:query 
 ```json
 {

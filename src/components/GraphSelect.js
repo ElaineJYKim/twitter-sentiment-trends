@@ -1,9 +1,9 @@
 import React from "react";
 import '../stylesheets/App.css';
 
-import { MinusCircleTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
+import { MinusCircleTwoTone, StockOutlined } from '@ant-design/icons';
 
-class Select extends React.Component {
+class GraphSelect extends React.Component {
 
     constructor(props) {
         super(props);
@@ -20,6 +20,7 @@ class Select extends React.Component {
 
     render() {
         const selected = this.state.selected;
+        const tooltipText = "See sentiment trends"
 
         if (selected) {
             return(
@@ -27,11 +28,11 @@ class Select extends React.Component {
             )
         } else {
             return(
-                <PlusCircleTwoTone onClick={this.handleClick.bind(this)}/>
+                <StockOutlined onClick={this.handleClick.bind(this)}/>
             )
         }
     }
 }
 
 
-export default Select;
+export default GraphSelect;
