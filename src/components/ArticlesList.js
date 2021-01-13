@@ -1,7 +1,12 @@
 import React from "react";
 import '../stylesheets/App.css';
 
-import { List, Alert, Spin, Typography } from 'antd';
+import { List, Alert } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
+
+function formatDate(date) {
+    return date.replaceAll('-', '');
+}
 
 function isEmpty(obj) {
     for(var prop in obj) {
@@ -27,12 +32,24 @@ class ArticlesList extends React.Component {
         };
     }
 
+    componentDidUpdate(prevProps) {
+        if(this.props.id !== prevProps.id)
+        {
+          this.fetchArticles();
+        }
+      }
+    
     componentDidMount() {
+        this.fetchArticles();      
+    }
 
-        this.setState({loading: true})
+    fetchArticles() {
 
-        const value = this.state.curValue;
-        const topics = this.state.topics;
+        console.log("fetching!");
+
+        this.setState({
+            loading: true,
+        });
 
         this.callApi()
            .then(
@@ -56,10 +73,10 @@ class ArticlesList extends React.Component {
     };
 
     callApi = async () => {
-        const date = this.state.date;
-        const query = this.state.query;
+        const date = formatDate(this.props.date);
+        const query = this.props.query;
         
-        let url = '/api/articles' + "?date=" + date + "&q=" + query;
+        let url = '/api/articles?date=' + date + '&q=' + query;
         const response = await fetch(url);
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
@@ -67,12 +84,12 @@ class ArticlesList extends React.Component {
     };
 
     render() {
-
+        
         const loading = this.state.loading;
         const data = this.state.response
 
         return (
-            <div className="articles-list" >
+            <div className="articles" >
 
                 {this.state.errorMsg 
                     && <Alert
@@ -93,6 +110,24 @@ class ArticlesList extends React.Component {
                         loading={loading}
                         itemLayout="vertical"
                         dataSource={data}
+                        size='small'
+                        pagination={{
+                            simple: true,
+                            size: 'small',
+                            pageSize: 3,
+                          }}
+                        header={
+                            <div className='articles-header'>
+                            <h4>
+                            <CloseOutlined 
+                               className='close-articles'
+                               onClick={() => this.props.onClose()}
+                            />
+                                Relevant New York Times Headlines from {this.props.date}
+                            </h4>
+                            </div>
+                        }
+                        bordered={true}
                         renderItem={item => (
                             <List.Item>
                                 <List.Item.Meta

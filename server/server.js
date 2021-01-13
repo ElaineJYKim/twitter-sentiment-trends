@@ -285,9 +285,11 @@ app.get("/api/sentiment/:tweet", async (req, res) => {
 // TWO PARAMETERS 1. date 2. q
 app.get("/api/articles", async (req, res) => {
 
+  console.log("YAY! - ARTICLES IN COMINGGGGG");
+
   if (!NYT_TOKEN) {
     console.log("BEANERS");
-    res.status(400).send(authMessage);
+    return res.status(400).send(authMessage);
   }
 
   const key = NYT_TOKEN;
@@ -315,11 +317,11 @@ app.get("/api/articles", async (req, res) => {
       }
     }
 
-    res.send(response);
+    return res.send(response);
 
   } catch (e) {
     console.log("ERROR PONYO ===== ", e);
-    res.status(500).send(e);
+    return res.status(500).send(e);
   }
 
 });

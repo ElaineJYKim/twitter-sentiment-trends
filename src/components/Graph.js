@@ -2,7 +2,9 @@ import React from "react";
 import '../stylesheets/App.css';
 import ArticlesList from './ArticlesList';
 
+import { Divider, Alert } from 'antd';
 import { ResponsiveLine } from '@nivo/line';
+import { InfoCircleTwoTone } from '@ant-design/icons';
 
 function formatData(selected, info) {
     var formatted = [];
@@ -29,24 +31,45 @@ class Graph extends React.Component {
       viewArticles: false,
       date: '',
       query: '',
+      point_id: '',
+      showTip: true,
     };
+
+    this.closeArticles = this.closeArticles.bind(this);
   }
 
   renderArticlesList() {
+    console.log("renderArticlesList called!");
     return (
-      <ArticlesList date={this.state.date} query={this.state.query}/>
+      <ArticlesList 
+          date={this.state.date} 
+          query={this.state.query} 
+          id={this.state.point_id}
+          onClose={this.closeArticles}
+      />
     );
   }
 
   handlePointClick(point) {
-    console.log(point)
-    const date = point['data']['xFormatted']
+    console.log(point);
+    const date = point['data']['xFormatted']  // 2021-01-06
     const query = point['serieId']
+    const point_id = point['id']
+
     this.setState({
       viewArticles: true,
       date: date,
-      query: query
+      query: query,
+      point_id: point_id
     })
+
+  }
+
+  closeArticles() {
+    console.log("closing articles view");
+    this.setState({
+      viewArticles: false,
+   })
   }
  
     render() {
@@ -54,15 +77,34 @@ class Graph extends React.Component {
         const selectedTopics = this.props.selected;
         const info = this.props.info;
 
-        const test = formatData(selectedTopics, info);
-        console.log("TEST DATA HERE ============ ", test);
+        const data = formatData(selectedTopics, info);
 
         if (selectedTopics.length) {
         return(
-            <div className='graph'>
-      <ResponsiveLine
+          <div>
+            <div className='graph-header'>
+              <Divider orientation="left">Sentiment Trends &nbsp;&nbsp;
+                  <InfoCircleTwoTone onClick={() => this.setState({showTip: !this.state.showTip})}/> 
+              </Divider>
+              {this.state.showTip && 
+               <Alert 
+                className='slim-container'
+                  message="Click on different points on the graph to see NYT 
+                          headlines relavent to the topic on that date" 
+                  type="info" 
+                  showIcon
+                  closable
+                  onClose={() => this.setState({showTip: false})} />
+              }
+              
+            </div>
+
+            <div className='graph-article-container'>
+
+      <div className={this.state.viewArticles ? 'graph' : 'graphCenter'}>
+        <ResponsiveLine
         curve={"monotoneX"}
-        data={test}
+        data={data}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         xScale={{
           type: "time",
@@ -89,13 +131,15 @@ class Graph extends React.Component {
           legendPosition: "middle"
         }}
         axisBottom={{
+          orient: 'bottom',
           format: "%b %d",
-          legend: "time scale",
-          legendOffset: -12
+          legend: "Date",
+          legendOffset: 36,
+          legendPosition: 'middle'
         }}
         colors={{ scheme: "nivo" }}
-        pointSize={6}
-        pointColor={{ theme: "background" }}
+        pointSize={10}
+        pointColor={{ from: 'color', modifiers: [] }}
         pointBorderWidth={2}
         pointBorderColor={{ from: "serieColor" }}
         pointLabel="y"
@@ -138,11 +182,17 @@ class Graph extends React.Component {
             },
         ]}
       />
-              {this.state.viewArticles && this.renderArticlesList}
+      </div>
+
+             {this.state.viewArticles && this.renderArticlesList()}
+            </div>
             </div>
         );
     } else {
-        return(<div className="noGraph"></div>);
+        if (this.state.viewArticles !== false) {this.setState({viewArticles: false})}
+        return(
+          <div className="noGraph"></div>
+        );
     }
     }
 }

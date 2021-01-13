@@ -4,7 +4,7 @@ import '../stylesheets/App.css';
 import TopicsList from './TopicsList';
 import Graph from './Graph';
 
-import { Input, Alert, Typography } from 'antd';
+import { Input, Alert } from 'antd';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 
 const tips = (
@@ -122,12 +122,12 @@ class Search extends React.Component {
     };
 
     handleEnter() {
-        const newTopics = [...this.state.topics, this.state.curValue]
+        // const newTopics = [...this.state.topics, this.state.curValue]
         this.handleSearch()
-        this.setState({
-            curValue: '',
-            topics: newTopics
-        });
+        // this.setState({
+        //     curValue: '',
+        //     topics: newTopics
+        // });
     }
 
     onErrorClose() {
@@ -142,13 +142,13 @@ class Search extends React.Component {
         return(
             <div>
 
+                <div className='slim-container'>
                 {this.state.errorMsg && <Alert
                     message="Opsies: Error time"
                     description={this.state.errorMsg}
                     type="error"
                     onClose={() => this.setState({errorMsg: ''})}
-                    closable showIcon/> 
-                    && <div className="space"/>
+                    closable showIcon/>
                 }
 
                 {this.state.showTips && <Alert
@@ -168,13 +168,14 @@ class Search extends React.Component {
                 suffix={<InfoCircleTwoTone onClick={() => this.setState({showTips: true})}/>}
                 />
 
-                <div className="space"/>
+                </div>
 
                 <Graph info={this.state.info} selected={this.state.selected}>
                 </Graph>
 
                 <div className="space"/>
 
+                <div className='slim-container'>
                 <TopicsList 
                 topics={this.state.topics} 
                 selected={this.state.selected} 
@@ -183,6 +184,7 @@ class Search extends React.Component {
                 onChange={this.handleSelectedUpdate.bind(this)}
                 delete={this.handleDelete.bind(this)}
                 />
+                </div>
 
             </div>
         );

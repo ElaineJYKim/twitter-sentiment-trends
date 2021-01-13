@@ -4,14 +4,14 @@ import Search from './Search';
 import Logo from '../assets/logo.png';
 
 import { PageHeader, Typography } from 'antd';
-import { ExperimentTwoTone } from '@ant-design/icons';
 
 const content = (
     <>
       <Typography>
-        Search for any topic you'd like and visualize sentiment changes in the twitter community.
-        You can compare and contrast these trends. Maybe you will find interesting potential 
-        correlations!
+        Search for a topic and visualize sentiment changes in the Twitter community.
+        Search for multiple topics to compare and contrast these trends. 
+        Click on datapoints to see if there are any relavent New York Times articles.
+        Maybe you will find interesting potential correlations!
       </Typography>
     </>
   );
@@ -20,17 +20,16 @@ class App extends React.Component {
 
     render() {
         return(
-            <div className="app-container">
+            <div className="">
                 <PageHeader
                     title="Twitter Sentiment Trends Visualizer"
                     className="site-page-header" 
                     subTitle=""
                     avatar={{src:Logo, size:'large', shape:'square'}}
+                    className='slim-container'
                >
                 {content}
                 </PageHeader>
-
-                <div className="space"/> <div className="space"/>
                 
                 <Search/>
             </div>

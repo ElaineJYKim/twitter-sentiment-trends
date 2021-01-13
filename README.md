@@ -2,6 +2,21 @@
 
 Graph sentiment trends by topic on twitter and compare with other topics.
 
+1. Pull relavent tweets from twitter
+2. Conduct Sentiment analysis on the tweets and average sentiments per day.
+3. Visualize the sentiment flow
+4. Click on different data points to see New York Times headlines relavent to the topic on the given day.
+
+## Run application
+1. clone repo
+2. set environment variables
+```
+export TWITTER_BEARER_TOKEN=AAAAAAAAAAAAAAAAAAAAACBJLAEAAAAAsYzrnffYUjZ4NHzsMuviTuA1sSw%3Ds0Oy3ivaxaIlBiy6IhgZna50tXYKEQwa1kFXJL4SJ5b6sLWHoZ
+
+export NYT_TOKEN=dyI6Feqpgk60QDvWFRBQHUlW3BLSGKkT
+```
+3. `npm run development`
+
 ## Dependencies
 + https://www.npmjs.com/package/sentiment#usage-example
 + https://github.com/recharts/recharts
@@ -11,7 +26,6 @@ Graph sentiment trends by topic on twitter and compare with other topics.
 
 ## Environment tokens 
 - export TWITTER_BEARER_TOKEN=AAAAAAAAAAAAAAAAAAAAACBJLAEAAAAAsYzrnffYUjZ4NHzsMuviTuA1sSw%3Ds0Oy3ivaxaIlBiy6IhgZna50tXYKEQwa1kFXJL4SJ5b6sLWHoZ
-
 
 - export NYT_TOKEN=dyI6Feqpgk60QDvWFRBQHUlW3BLSGKkT
 
@@ -24,14 +38,16 @@ Parameters
 response = https://developer.nytimes.com/docs/articlesearch-product/1/routes/articlesearch.json/get
 
 /api/searchSentiment/:query 
+ex) /api/searchSentiment/trump
 ```json
 {
-    "2020-12-29T07:08:42.485Z" :{
-        "meanSentiment": 0.23,
-        "sentimentArray": [],
-        "response": {
-            // Same json format as the one below
-        }
+    "1/12/2021":-1.173913043478261,
+    "1/11/2021":-0.5194805194805194,
+    "1/10/2021":-1.5222222222222221,
+    "1/9/2021":-1.355263157894737,
+    "1/8/2021":-1.4078947368421053,
+    "1/7/2021":-0.676056338028169,
+    "1/6/2021":-0.9722222222222222
 }
 ```
 

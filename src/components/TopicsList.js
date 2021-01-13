@@ -2,8 +2,9 @@ import React from "react";
 import '../stylesheets/App.css';
 import GraphSelect from './GraphSelect';
 
-import { Divider, Card, List, Row, Col, Spin } from 'antd';
-import {DeleteOutlined, EllipsisOutlined, EditOutlined} from '@ant-design/icons';
+import { Divider, Card, Row, Col, Spin } from 'antd';
+import {DeleteOutlined} from '@ant-design/icons';
+import { Redirect } from "react-router-dom";
 
 class TopicsList extends React.Component {
 
@@ -52,9 +53,9 @@ class TopicsList extends React.Component {
                 <Col className="gutter-row" span={6} >
                     <Card
                         actions={[
-                            <selectContainer className="selectContainer" data-topic={topic} onClick={this.handleSelect.bind(this)}>
+                            <div className="selectContainer" data-topic={topic} onClick={this.handleSelect.bind(this)}>
                                     <GraphSelect/>
-                            </selectContainer>, 
+                            </div>, 
                             <DeleteOutlined data-topic={topic} onClick={this.handleDelete.bind(this)} key="delete"/>
                         ]}
                     >

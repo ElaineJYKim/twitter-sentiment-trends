@@ -1,7 +1,44 @@
 @import '~antd/dist/antd.css';
 
+.graph-article-container {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+
+.graph-header {
+    margin-top: 3rem;
+}
+
 .graph {
-    height: 30rem;
+    height: 25rem;
+    width: 70%;
+    float: left;
+}
+
+.graphCenter {
+    height: 25rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.articles {
+    width:  30%;
+    float: left;
+}
+
+.articles-header {
+    display: flex;
+}
+
+.close-articles {
+    margin-right: 10px;
+}
+.close-articles:hover {
+    opacity: .5;
 }
 
 .selectContainer {
@@ -10,11 +47,15 @@
     justify-content: center;
 }
 
-.app-container {
+.slim-container {
     margin: 0 auto;
     width: 60%;  
 }
 
 .space {
     height: 1rem;
+}
+
+.topic-cards {
+    padding-bottom: 4rem;
 }
