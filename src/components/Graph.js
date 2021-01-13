@@ -83,8 +83,9 @@ class Graph extends React.Component {
         return(
           <div>
             <div className='graph-header'>
-              <Divider orientation="left">Sentiment Trends &nbsp;&nbsp;
+              <Divider orientation="left"><h4>Sentiment Trends &nbsp;&nbsp;
                   <InfoCircleTwoTone onClick={() => this.setState({showTip: !this.state.showTip})}/> 
+                  </h4>
               </Divider>
               {this.state.showTip && 
                <Alert 

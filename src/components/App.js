@@ -20,7 +20,7 @@ class App extends React.Component {
 
     render() {
         return(
-            <div className="">
+            <div className="app">
                 <PageHeader
                     title="Twitter Sentiment Trends Visualizer"
                     className="site-page-header" 

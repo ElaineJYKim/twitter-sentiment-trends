@@ -45,7 +45,7 @@ class TopicsList extends React.Component {
         return(
             <div className='topic-cards'>
 
-                <Divider orientation="left">Topics</Divider>
+                <Divider orientation="left"><h4>Topics</h4></Divider>
 
                 <Spin size="small" spinning={loading} tip="look at the spinny thing and it shall load in no time...">
                 <Row gutter={[16, 16]}>
