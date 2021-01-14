@@ -37,7 +37,7 @@ const errorMessage = {
 const authMessage = {
   title: "Could not authenticate",
   details: [
-    `Please make sure your bearer token configured and correct.`,
+    `Please make sure your bearer tokens are configured and correct.`,
   ],
   type: "https://developer.twitter.com/en/docs/authentication",
 };
@@ -56,6 +56,120 @@ function readableDate(dateObj) {
   let year = dateObj.getUTCFullYear();
   return month + "/" + day + "/" + year;
 }
+
+
+const asyncOperation = ([startDate, url]) => {
+  console.log("calling ------ ", startDate)
+  return [startDate, get(url)]
+};
+
+const createListOfArguments = (query) => {
+  const listOfArguments = [];
+
+  const token = BEARER_TOKEN;
+  const url = searchURL + "?query=" + query + "&tweet.fields=lang" + "&max_results=100" 
+
+  var startTime = new Date();
+  var endTime = new Date();
+  var count = 0; 
+
+  while (count < 7) {
+    startTime.setDate(endTime.getDate()-1);
+    let startTimeString = startTime.toISOString();
+    let readableStartTime = readableDate(startTime);
+
+    if (count === 0) {
+
+      const requestConfig = {
+        url: url + "&start_time=" + startTimeString,
+        auth: {
+          bearer: token,
+        },
+        json: true,
+      };
+
+      listOfArguments.push([readableStartTime, requestConfig]);
+
+    } else {
+
+      const requestConfig = {
+        url: url + "&start_time=" + startTimeString + '&end_time=' + endTime.toISOString(),
+        auth: {
+          bearer: token,
+        },
+        json: true,
+      };
+
+      listOfArguments.push([readableStartTime, requestConfig]);
+
+    }
+
+    endTime = new Date(startTimeString);
+    count++;
+
+  }
+
+  return listOfArguments;
+}
+
+// concurrent twitter requests
+// response = {date: meanSentiment, date: meanSentiment ....}
+app.get("/api/searchSentiment/:query", async (req, res) => {
+  console.log("It has begun!!")
+
+  if (!BEARER_TOKEN) {
+    return res.status(400).send(authMessage);
+  }
+
+  var Sentiment = require('sentiment');
+  var sentiment = new Sentiment();
+
+  const listOfArguments = createListOfArguments(req.params.query);
+  console.log("List of arguements:    ", listOfArguments);
+
+  const listOfPromises = listOfArguments.map(asyncOperation);
+
+  const results = {};
+  for (const promise of listOfPromises) {
+    try {
+      let [date, p] = promise;
+      let response = await p;
+      //let response = await promise;
+  
+      if (response.statusCode !== 200) {
+        if (response.statusCode === 403) {
+          console.log("ERROR DUMPLING ===== ", response.body);
+          return res.status(403).send(response.body);
+        } else {
+          throw new Error(response.body.error.message);
+        }
+      }
+
+      let textArray = response.body.data.filter(isEng).map(({ text }) => text);
+      let sentimentArray = textArray.map(tweet => sentiment.analyze(tweet).score);
+      let meanSentiment = average(sentimentArray);
+  
+
+        // let summary = {
+        //   "meanSentiment": meanSentiment,
+        //   "sentimentArray": sentimentArray,
+        //   "response": response
+        // }
+
+      //results.push(meanSentiment);
+      results[date] = meanSentiment;
+      console.log("Current Results ============    ", results)
+
+    } catch (e) {
+      console.log("ERROR PONYO ===== ", e);
+      return res.status(500).send(e);
+    }
+  }
+
+  return res.send(results);
+
+});
+
 
 // Add paramters to change api returns
 // TODO: error message not being sent
