@@ -29,6 +29,12 @@ export NYT_TOKEN=dyI6Feqpgk60QDvWFRBQHUlW3BLSGKkT
 
 - export NYT_TOKEN=dyI6Feqpgk60QDvWFRBQHUlW3BLSGKkT
 
+## Future Development
+1. Pull articles for entertainment/etc topics: currently pulling article reerences strictly from NYT restricts users to "serious news"
+2. UI improvements: still not satisfactory
+3. Refactor code a little so no change needs to be implemented if gain access to premium version of twitter api (currently restricted to 7 days of data)
+4. Handle and search for other languages besides English 
+
 ## Server
 GET /api/articles
 Parameters
