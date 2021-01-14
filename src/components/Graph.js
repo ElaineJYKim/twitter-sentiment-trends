@@ -77,9 +77,8 @@ class Graph extends React.Component {
         const selectedTopics = this.props.selected;
         const info = this.props.info;
 
-        const data = formatData(selectedTopics, info);
-
         if (selectedTopics.length) {
+          const data = formatData(selectedTopics, info);
         return(
           <div>
             <div className='graph-header'>
@@ -95,11 +94,10 @@ class Graph extends React.Component {
                   type="info" 
                   showIcon
                   closable
+                  onClick={() => this.setState({showTip: false})}
                   onClose={() => this.setState({showTip: false})} />
-              }
-              
+              }  
             </div>
-
             <div className='graph-article-container'>
 
       <div className={this.state.viewArticles ? 'graph' : 'graphCenter'}>
@@ -138,7 +136,7 @@ class Graph extends React.Component {
           legendOffset: 36,
           legendPosition: 'middle'
         }}
-        colors={{ scheme: "nivo" }}
+        colors={{ scheme: "category10" }}
         pointSize={10}
         pointColor={{ from: 'color', modifiers: [] }}
         pointBorderWidth={2}

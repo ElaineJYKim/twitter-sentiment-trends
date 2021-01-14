@@ -30,10 +30,6 @@
     float: left;
 }
 
-.articles-header {
-    display: flex;
-}
-
 .close-articles {
     margin-right: 10px;
 }

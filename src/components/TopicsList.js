@@ -1,10 +1,9 @@
 import React from "react";
 import '../stylesheets/App.css';
-import GraphSelect from './GraphSelect';
 
 import { Divider, Card, Row, Col, Spin } from 'antd';
 import {DeleteOutlined} from '@ant-design/icons';
-import { Redirect } from "react-router-dom";
+import { MinusCircleTwoTone, StockOutlined } from '@ant-design/icons';
 
 class TopicsList extends React.Component {
 
@@ -54,7 +53,10 @@ class TopicsList extends React.Component {
                     <Card
                         actions={[
                             <div className="selectContainer" data-topic={topic} onClick={this.handleSelect.bind(this)}>
-                                    <GraphSelect/>
+                                    {this.state.selected.includes(topic) ? 
+                                        <MinusCircleTwoTone twoToneColor="#eb2f96"/> :
+                                        <StockOutlined />
+                                    }
                             </div>, 
                             <DeleteOutlined data-topic={topic} onClick={this.handleDelete.bind(this)} key="delete"/>
                         ]}

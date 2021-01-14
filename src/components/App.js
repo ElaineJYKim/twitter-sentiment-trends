@@ -23,7 +23,6 @@ class App extends React.Component {
             <div className="app">
                 <PageHeader
                     title="Twitter Sentiment Trends Visualizer"
-                    className="site-page-header" 
                     subTitle=""
                     avatar={{src:Logo, size:'large', shape:'square'}}
                     className='slim-container'

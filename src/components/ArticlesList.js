@@ -1,7 +1,7 @@
 import React from "react";
 import '../stylesheets/App.css';
 
-import { List, Alert } from 'antd';
+import { List, Alert, Divider, Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
 function formatDate(date) {
@@ -28,7 +28,8 @@ class ArticlesList extends React.Component {
             errorMsg: "",
             response: {},
             loading: false,
-            responseReceived: false
+            responseReceived: false,
+            showAbstract: false
         };
     }
 
@@ -95,6 +96,7 @@ class ArticlesList extends React.Component {
                     && <Alert
                     message={this.state.errorMsg}
                     type="error"
+                    onClose={() => this.props.onClose()}
                     closable showIcon/> 
                 }
 
@@ -102,6 +104,7 @@ class ArticlesList extends React.Component {
                     && <Alert 
                     message="Found no results"
                     type="warning"
+                    onClose={() => this.props.onClose()}
                     closable showIcon/>
                 }
                 
@@ -123,17 +126,33 @@ class ArticlesList extends React.Component {
                                className='close-articles'
                                onClick={() => this.props.onClose()}
                             />
-                                Relevant New York Times Headlines from {this.props.date}
+                                Relevant New York Times Headlines for <b>{this.props.query}</b>
                             </h4>
+                            <h5>
+                                Date: <b>{this.props.date}</b>
+                                <Divider type="vertical"/>
+                                <Button 
+                                   type="text"
+                                   size="small"
+                                   onClick={() => this.setState({showAbstract: !this.state.showAbstract})}
+                                >
+                                    <h5>{this.state.showAbstract? "hide abstract" : "show abstract"}</h5>
+                                </Button>
+                            </h5>
                             </div>
                         }
                         bordered={true}
                         renderItem={item => (
                             <List.Item>
-                                <List.Item.Meta
-                                title={<a href={item['web_url']}>{item['headline']['main']}</a>}
-                                description={item['abstract']}
-                                />
+                                {this.state.showAbstract ? 
+                                  <List.Item.Meta
+                                  title={<a href={item['web_url']}>{item['headline']['main']}</a>}
+                                  description={item['abstract']}
+                                  /> :
+                                  <List.Item.Meta
+                                  title={<a href={item['web_url']}>{item['headline']['main']}</a>}
+                                  />
+                                }
                             </List.Item>
                         )}
                     />} 
