@@ -36,14 +36,14 @@ export NYT_TOKEN=dyI6Feqpgk60QDvWFRBQHUlW3BLSGKkT
 4. Handle and search for other languages besides English 
 
 ## Server
-GET /api/articles
+<b>GET /api/articles</b>
 Parameters
 - date = YYYYmmdd
 - q = "query string"
 
 response = https://developer.nytimes.com/docs/articlesearch-product/1/routes/articlesearch.json/get
 
-/api/searchSentiment/:query 
+<b>/api/searchSentiment/:query </b>
 ex) /api/searchSentiment/trump
 ```json
 {
@@ -57,7 +57,7 @@ ex) /api/searchSentiment/trump
 }
 ```
 
-/api/search/:query 
+<b>/api/search/:query </b>
 
 ```json
 {
@@ -87,7 +87,7 @@ ex) /api/searchSentiment/trump
 }
 ```
 
-/api/sentiment/:text
+<b>/api/sentiment/:text</b>
 ```json
 {
     "sentiment": 3
