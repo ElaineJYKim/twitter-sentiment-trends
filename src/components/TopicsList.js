@@ -37,7 +37,7 @@ class TopicsList extends React.Component {
 
                 <Divider orientation="left"><h4>Topics</h4></Divider>
 
-                <Spin size="small" spinning={loading} tip="look at the spinny thing and it shall load in no time...">
+                <Spin size="small" spinning={loading}>
                 <Row gutter={[16, 16]}>
                 { topics.map((topic) => (
                 <Col className="gutter-row" span={6} >
