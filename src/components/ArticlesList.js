@@ -4,19 +4,19 @@ import '../stylesheets/App.css';
 import { List, Alert, Divider, Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
-function formatDate(date) {
+const formatDate = (date) => {
     return date.replaceAll('-', '');
 }
 
-function isEmpty(obj) {
+const isEmpty = (obj) => {
     for(var prop in obj) {
-      if(obj.hasOwnProperty(prop)) {
-        return false;
+        if(obj.hasOwnProperty(prop)) {
+          return false;
+        }
       }
-    }
-  
-    return JSON.stringify(obj) === JSON.stringify({});
-  }
+    
+      return JSON.stringify(obj) === JSON.stringify({});
+}
 
 class ArticlesList extends React.Component {
     

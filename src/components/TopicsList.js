@@ -7,16 +7,9 @@ import { MinusCircleTwoTone, StockOutlined } from '@ant-design/icons';
 
 class TopicsList extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: [],
-        }
-    }
-
     handleSelect(e) {
 
-        const selected = this.state.selected;
+        const selected = this.props.selected;
         const topic = e.currentTarget.dataset.topic;
         var newSelected = [];
 
@@ -25,8 +18,6 @@ class TopicsList extends React.Component {
         } else {
             newSelected = [...selected, topic];
         };
-
-        this.setState({selected: newSelected});
 
         this.props.onChange(newSelected);
     }
@@ -53,7 +44,7 @@ class TopicsList extends React.Component {
                     <Card
                         actions={[
                             <div className="selectContainer" data-topic={topic} onClick={this.handleSelect.bind(this)}>
-                                    {this.state.selected.includes(topic) ? 
+                                    {this.props.selected.includes(topic) ? 
                                         <MinusCircleTwoTone twoToneColor="#eb2f96"/> :
                                         <StockOutlined />
                                     }

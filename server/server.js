@@ -42,21 +42,20 @@ const authMessage = {
   type: "https://developer.twitter.com/en/docs/authentication",
 };
 
-function isEng(data) {
+const isEng = (data) => {
   return data.lang === "en";
 }
 
-function average(array) {
+const average = (array) => {
   return array.reduce((a, b) => a + b) / array.length;
 }
 
-function readableDate(dateObj) {
+const readableDate = (dateObj) => {
   let month = dateObj.getUTCMonth() + 1; //months from 1-12
   let day = dateObj.getUTCDate();
   let year = dateObj.getUTCFullYear();
   return month + "/" + day + "/" + year;
 }
-
 
 const asyncOperation = ([startDate, url]) => {
   console.log("calling ------ ", startDate)
@@ -148,7 +147,6 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
       let textArray = response.body.data.filter(isEng).map(({ text }) => text);
       let sentimentArray = textArray.map(tweet => sentiment.analyze(tweet).score);
       let meanSentiment = average(sentimentArray);
-  
 
         // let summary = {
         //   "meanSentiment": meanSentiment,
@@ -173,7 +171,7 @@ app.get("/api/searchSentiment/:query", async (req, res) => {
 
 // Add paramters to change api returns
 // TODO: error message not being sent
-app.get("/api/searchSentiment/:query", async (req, res) => {
+app.get("/api/ss/:query", async (req, res) => {
   if (!BEARER_TOKEN) {
      return res.status(400).send(authMessage);
   }
@@ -388,7 +386,6 @@ app.get("/api/search/:query", async (req, res) => {
 });
 
 app.get("/api/sentiment/:tweet", async (req, res) => {
-
   var Sentiment = require('sentiment');
   var sentiment = new Sentiment();
   var result = sentiment.analyze(req.params.tweet);

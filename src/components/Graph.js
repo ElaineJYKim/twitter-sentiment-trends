@@ -6,21 +6,24 @@ import { Divider, Alert } from 'antd';
 import { ResponsiveLine } from '@nivo/line';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 
-function formatData(selected, info) {
-    var formatted = [];
+const formatData = (selected, info) => {
+  var formatted = [];
 
-    selected.forEach((topic) => {
-        let data = info[topic]
+  console.log("SELECTED:   ", selected);
+  console.log("INFO KEYS:  ", Object.keys(info));
+  
+  selected.forEach((topic) => {
+      let data = info[topic]
 
-        var dataRefactored = []
-        Object.keys(data).forEach((key) => (
-            dataRefactored.push({"x": key, "y": data[key]})
-        ));
+      var dataRefactored = []
+      Object.keys(data).forEach((key) => (
+          dataRefactored.push({"x": key, "y": data[key]})
+      ));
 
-        formatted.push({"id": topic, "data": dataRefactored})
-    });
+      formatted.push({"id": topic, "data": dataRefactored})
+  });
 
-    return formatted
+  return formatted;
 }
 
 class Graph extends React.Component {
@@ -79,6 +82,7 @@ class Graph extends React.Component {
 
         if (selectedTopics.length) {
           const data = formatData(selectedTopics, info);
+      
         return(
           <div>
             <div className='graph-header'>

@@ -147,6 +147,7 @@ class Search extends React.Component {
                     message="Opsies: Error time"
                     description={this.state.errorMsg}
                     type="error"
+                    onClick={() => this.setState({errorMsg: ''})}
                     onClose={() => this.setState({errorMsg: ''})}
                     closable showIcon/>
                 }
@@ -160,7 +161,7 @@ class Search extends React.Component {
 
                 <div className="space"/>
 
-                <Input 
+                <Input
                 placeholder="Search Topic" 
                 value={this.state.curValue}
                 onChange={(e) => this.setState({curValue: e.target.value})}
